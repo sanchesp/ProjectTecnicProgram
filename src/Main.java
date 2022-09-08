@@ -20,26 +20,24 @@ public class Main {
             //1
             long quantidadeJogos = Files.lines(path.toAbsolutePath())
                     .skip(1)
-                    .map(tabela -> mapToTabela(tabela))
                     .count();
             System.out.println("Quantas partidas aconteceram no total?");
             System.out.println(quantidadeJogos);
 
             //2
-            long quantidadeGols = Files.lines(path.toAbsolutePath())
+            Integer quantidadeGols = Files.lines(path.toAbsolutePath())
                     .skip(1)
                     .map(tabela -> mapToTabela(tabela))
-                    .mapToLong(tabela -> tabela.getMandantePlacar() + tabela.getVisitantePlacar())
+                    .mapToInt(tabela -> tabela.getMandantePlacar() + tabela.getVisitantePlacar())
                     .sum();
             System.out.println("Quantos gols tiveram no total?");
             System.out.println(quantidadeGols);
 
             //3
-            long partidasPeriodo = Files.lines(path.toAbsolutePath())
+            Long partidasPeriodo = Files.lines(path.toAbsolutePath())
                     .skip(1)
                     .map(tabela -> mapToTabela(tabela))
-                    .filter(table -> table.getData().getYear() >= 2010)
-                    .filter(table -> table.getData().getYear() <= 2015)
+                    .filter(table -> table.getData().getYear() >= 2010 && table.getData().getYear() <= 2015)
                     .count();
             System.out.println("Quantas partidas ocorreram ente 2010 e 2015?");
             System.out.println(partidasPeriodo);
@@ -74,6 +72,14 @@ public class Main {
                     .filter((visitante) -> visitante.getVisitante().equals(visitante.getVencedor()))
                     .count());
             System.out.println(vitoriaVisitante);
+
+            //11
+            Map <Integer, Long> jogosPorAno = Files.lines(path.toAbsolutePath())
+                    .skip(1)
+                    .map(table -> mapToTabela(table))
+                    .collect(Collectors.groupingBy(partidas -> partidas.getData().getYear(),Collectors.counting()));
+
+            System.out.println(jogosPorAno);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -82,9 +88,9 @@ public class Main {
 
     }
 
-    private static Tabela mapToTabela (String resultadosCampeonato){
+    private static Tabela mapToTabela (String t){
 
-        String [] coluna = resultadosCampeonato.split(",");
+        String [] coluna = t.split(",");
 
         Tabela tabela = new Tabela();
         tabela.setRodada(Integer.parseInt(coluna [1]));
@@ -98,6 +104,7 @@ public class Main {
         tabela.setMandanteEstado(coluna[15]);
         tabela.setVisitanteEstado(coluna[16]);
         tabela.setVencedorEstado(coluna[17]);
+        tabela.setTotalPlacar(tabela.getMandantePlacar()+ tabela.getVisitantePlacar());
 
         return tabela;
     }

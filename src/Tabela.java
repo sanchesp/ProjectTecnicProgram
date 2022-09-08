@@ -11,6 +11,7 @@ public class Tabela {
     private String arena;
     private Integer mandantePlacar;
     private Integer visitantePlacar;
+    private Integer totalPlacar;
     private String mandanteEstado;
     private String visitanteEstado;
     private String vencedorEstado;
@@ -104,5 +105,13 @@ public class Tabela {
 
     public void setVencedorEstado(String vencedorEstado) {
         this.vencedorEstado = vencedorEstado;
+    }
+
+    public Integer getTotalPlacar() {
+        return totalPlacar;
+    }
+
+    public void setTotalPlacar(Integer totalPlacar) {
+        this.totalPlacar = totalPlacar;
     }
 }
